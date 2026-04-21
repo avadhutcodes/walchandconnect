@@ -13,7 +13,21 @@ router.delete("/deletepost/:id" , verifytoken , deletepost);
 router.get("/viewpost" , verifytoken , viewpost);
 router.get("/mypost" , verifytoken , mypost);
 router.get("/dashboard" , verifytoken , (req,res) =>{
-    res.sendFile(path.join(__dirname,"../views/dashboard.html"));
+    res.sendFile(path.join(__dirname,"./views/dashboard.html"));
 }); 
+router.get("/signup",(req,res)=>{
+    res.sendFile(path.join(__dirname,"./views/Signup.html"));
+});
+
+router.get("/login",(req,res)=>{
+    res.sendFile(path.join(__dirname,"./views/login.html"));
+});
+
+router.get("/dashboard",verifytoken,(req,res)=>{
+    res.sendFile(path.join(__dirname,"./views/dashborad.html"));
+});
+
+
+
 
 module.exports = router;
