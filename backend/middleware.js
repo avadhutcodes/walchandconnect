@@ -2,14 +2,15 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const verifytoken = (req,res,next) => {
- const authheader = req.headers["authorization"];
- if(!authheader){
-  return res.status(401).send("no token provided");
+ const token = req.cookies.token;
+ if(!token){
+    return res.status(401).json({message:"no token provided"});
+
  }
- const token = authheader.replace("Bearer ", "");
+ const realtoken = token.replace("Bearer" , "");
 
  try{
-  const decoded = jwt.verify(token , process.env.secret);
+  const decoded = jwt.verify(realtoken , process.env.secret);
   req.user = decoded;
   next();
  }

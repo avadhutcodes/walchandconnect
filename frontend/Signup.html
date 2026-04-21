@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Walchand Connect - Signup</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  background: linear-gradient(135deg, #0f3460, #1877f2, #4aa3ff);
+  position: relative;
+}
+
+/* 🔵 Animated Blobs */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  animation: float 12s ease-in-out infinite alternate;
+}
+
+.blob1 {
+  width: 300px;
+  height: 300px;
+  background: #1877f2;
+  top: -50px;
+  left: -50px;
+}
+
+.blob2 {
+  width: 350px;
+  height: 350px;
+  background: #4aa3ff;
+  bottom: -80px;
+  right: -80px;
+  animation-delay: 2s;
+}
+
+.blob3 {
+  width: 250px;
+  height: 250px;
+  background: #0d5bd3;
+  top: 40%;
+  left: 60%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) scale(1); }
+  100% { transform: translateY(-30px) scale(1.1); }
+}
+
+/* Container */
+.container {
+  width: 900px;
+  height: 500px;
+  display: flex;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+  animation: fadeIn 1s ease;
+  z-index: 1;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Left */
+.left {
+  flex: 1;
+  background: linear-gradient(180deg, #1877f2, #0d5bd3);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+}
+
+.left h1 {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.left p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* Right */
+.right {
+  flex: 1;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form */
+.form-box {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-box h2 {
+  text-align: center;
+  color: #1877f2;
+}
+
+/* Inputs */
+.form-box input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-box input:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 10px rgba(24,119,242,0.3);
+  transform: scale(1.02);
+}
+
+/* Button */
+.form-box button {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1877f2, #0d5bd3);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-box button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Login Text */
+.login-text {
+  text-align: center;
+  font-size: 14px;
+  margin-top:15px;
+  width: 100%;
+}
+
+.login-text a {
+  color: #1877f2;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.login-text a:hover {
+  color: #0d5bd3;
+  text-decoration: underline;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<div class="container">
+
+  <div class="left">
+    <h1>Campus Connect</h1>
+    <p>Connect with your friends, share ideas, and stay updated.</p>
+  </div>
+
+  <div class="right">
+    <form class="form-box" id="signupForm">
+      <h2>Create Account</h2>
+
+      <input type="text"  id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+
+      <button type="submit">Create Account</button>
+ <p class="login-text">
+        Already have an account? <a href="login.html">Login</a>
+      </p>
+      
+    </form>
+   
+  </div>
+
+</div>
+<script>
+document.getElementById("signupForm").addEventListener("submit", async function(e) {
+  e.preventDefault(); //  it is used to the stop page reload
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  // Basic validation
+  if(username === "" || password === "") {
+    alert("Please fill all fields");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    });
+
+    const data = await response.json();
+
+    if(response.ok) {
+      alert("Signup successful!");
+
+      // redirect to login page (change later if needed)
+      window.location.href = "login.html";
+    } else {
+      alert(data.message || "Signup failed");
+    }
+
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Server error. Make sure backend is running.");
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const verifytoken = require("./middleware");
+const path = require("path");
 const{signup , login , createpost, deletepost , viewpost , mypost} = require("./controller");
 
 router.get("/about" , (req,res) => res.send("welcome to walchandconnect"));
@@ -11,5 +12,8 @@ router.post("/createpost" , verifytoken , createpost);
 router.delete("/deletepost/:id" , verifytoken , deletepost);
 router.get("/viewpost" , verifytoken , viewpost);
 router.get("/mypost" , verifytoken , mypost);
+router.get("/dashboard" , verifytoken , (req,res) =>{
+    res.sendFile(path.join(__dirname,"../views/dashboard.html"));
+}); 
 
 module.exports = router;

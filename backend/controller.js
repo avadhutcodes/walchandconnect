@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const cookieparser = require("cookie-parser");
 
 const User = require("./model/user.js");
 const Post = require("./model/post.js");
@@ -9,26 +9,28 @@ const Post = require("./model/post.js");
 const signup =  async (req, res) => {
    const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).send("Username and password required");
+    return res.status(400).json({message:"Username and password required"});
   }
 
   const existinguser = await User.findOne({ username });
 
   if(existinguser){
-    return res.status(409).send("User already exists with this username");
+    return res.status(409).json({message:"User already exists with this username"});
   }
 
   const hashedpassword = await bcrypt.hash(password,10);
 
   await User.create({username , password:hashedpassword});
-  res.send("you are stored in my database successfully !!!!!!");
+  res.json({message:"you are stored in my database successfully !!!!!!"});
 };
 
 const login =  async (req,res) => {
+   
   const {username , password} = req.body;
 
   if(!username || !password){
-     return res.status(400).send("Username and password required");
+    
+     return res.status(400).json({message:"Username and password required"});
   }
 
   const user = await User.findOne({username});
@@ -36,13 +38,13 @@ const login =  async (req,res) => {
   //console.log(te);
 
   if(!user){
-    return res.status(404).send("User not found !!!");
+    return res.status(404).json({message:"User not found !!!"});
   }
 
   const ismatch = await bcrypt.compare(password , user.password);
 
   if(!ismatch){
-     return res.status(401).send("Invalid password !!");
+     return res.status(401).json({message:"Invalid password !!"});
   }
   // create the token 
 
@@ -52,7 +54,14 @@ const login =  async (req,res) => {
     {expiresIn: "1h"}
 
   );
-  res.json({message:"LOGIN DONE" , token: token});
+
+res.cookie("token" , token ,{
+  httpOnly:true,
+  secure:process.env.NODE_ENV === "production",
+  maxAge:24 * 60 * 60 * 1000,
+});
+
+   res.status(200).json({ message:"cookie sent done"});
 
 };
 
@@ -69,7 +78,7 @@ const createpost =  async (req,res) => {
 
   });
 
-  res.send("POST CREATED !!!!! ");
+  res.json({message:"POST CREATED !!!!! "});
  
 };
 
@@ -84,21 +93,21 @@ console.log(postId);
 console.log(deletedpost);
 
 if(!deletedpost){
-  return res.status(404).send("post not found !!!! ");
+  return res.status(404).json({message:"post not found !!!! "});
 }
 
-res.send("post deleted successfully");
+res.json({message:"post deleted successfully"});
 
 };
 
 const viewpost =  async (req,res) => {
   const posts = await Post.find();
-  res.json(posts);
+  res.json({posts});
 };
 const mypost = async(req,res) =>{
-  const userspecificpost = await Post.find({
+  const mypost = await Post.find({
     userId : req.user.id
   });
-  res.json(userspecificpost);
+  res.json({mypost});
 };
 module.exports = {signup , login , createpost , deletepost , viewpost, mypost };
