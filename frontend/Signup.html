@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Campus Connect - Login</title>
+<title>Walchand Connect - Signup</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -62,8 +62,8 @@ body {
 }
 
 @keyframes float {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-30px); }
+  0% { transform: translateY(0px) scale(1); }
+  100% { transform: translateY(-30px) scale(1.1); }
 }
 
 /* Container */
@@ -75,8 +75,20 @@ body {
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+  animation: fadeIn 1s ease;
   background: white;
   z-index: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Left */
@@ -92,10 +104,11 @@ body {
 
 .left h1 {
   font-size: 32px;
+  margin-bottom: 10px;
 }
 
 .left p {
-  margin-top: 10px;
+  font-size: 15px;
   opacity: 0.9;
 }
 
@@ -122,21 +135,21 @@ body {
 }
 
 /* Inputs */
-input {
+.form-box input {
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #ddd;
   outline: none;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
-input:focus {
+.form-box input:focus {
   border-color: #1877f2;
-  box-shadow: 0 0 8px rgba(24,119,242,0.3);
+  box-shadow: 0 0 10px rgba(24,119,242,0.3);
 }
 
 /* Button */
-button {
+.form-box button {
   padding: 12px;
   border: none;
   border-radius: 10px;
@@ -144,16 +157,16 @@ button {
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
-button:hover {
+.form-box button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-/* Link */
-.signup-text {
+/* Login Text */
+.login-text {
   text-align: center;
   font-size: 14px;
   margin-top: 10px;
@@ -195,20 +208,20 @@ button:hover {
 
   <div class="left">
     <h1>Campus Connect</h1>
-    <p>Welcome back! Login to continue.</p>
+    <p>Connect with your friends, share ideas, and stay updated.</p>
   </div>
 
   <div class="right">
-    <form class="form-box" id="loginForm">
-      <h2>Login</h2>
+    <form class="form-box" id="signupForm">
+      <h2>Create Account</h2>
 
       <input type="text" id="username" placeholder="Username" required>
       <input type="password" id="password" placeholder="Password" required>
 
-      <button type="submit">Login</button>
+      <button type="submit">Create Account</button>
 
-      <p class="signup-text">
-        Don’t have an account? <a href="/signup">Sign Up</a>
+      <p class="login-text">
+        Already have an account? <a href="/login">Login</a>
       </p>
     </form>
   </div>
@@ -216,21 +229,19 @@ button:hover {
 </div>
 
 <script>
-const form = document.getElementById("loginForm");
-
-form.addEventListener("submit", async function(e) {
+document.getElementById("signupForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  if(!username || !password) {
+  if(username === "" || password === "") {
     alert("Please fill all fields");
     return;
   }
 
   try {
-    const res = await fetch('/login', {
+    const response = await fetch("http://localhost:5000/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -238,18 +249,18 @@ form.addEventListener("submit", async function(e) {
       body: JSON.stringify({ username, password })
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
-    if(res.ok) {
-      alert("Login successful");
-      window.location.href = "/dashboard";
+    if(response.ok) {
+      alert("Signup successful!");
+      window.location.href = "login.html";
     } else {
-      alert(data.message || "Invalid credentials");
+      alert(data.message || "Signup failed");
     }
 
-  } catch (err) {
-    console.error(err);
-    
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Server error. Make sure backend is running.");
   }
 });
 </script>
