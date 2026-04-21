@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Walchand Connect - Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Connect - Login</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -15,16 +16,17 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #0f3460, #1877f2, #4aa3ff);
-  overflow: hidden;
   position: relative;
+  overflow-x: hidden;
+  padding: 20px;
 }
 
-/* Animated blobs */
+/* Blobs */
 .blob {
   position: absolute;
   border-radius: 50%;
@@ -34,16 +36,16 @@ body {
 }
 
 .blob1 {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   background: #1877f2;
   top: -50px;
   left: -50px;
 }
 
 .blob2 {
-  width: 350px;
-  height: 350px;
+  width: 300px;
+  height: 300px;
   background: #4aa3ff;
   bottom: -80px;
   right: -80px;
@@ -51,8 +53,8 @@ body {
 }
 
 .blob3 {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   background: #0d5bd3;
   top: 40%;
   left: 60%;
@@ -66,16 +68,18 @@ body {
 
 /* Container */
 .container {
-  width: 900px;
-  height: 500px;
+  width: 100%;
+  max-width: 900px;
+  min-height: 500px;
   display: flex;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+  background: white;
   z-index: 1;
 }
 
-/* Left panel */
+/* Left */
 .left {
   flex: 1;
   background: linear-gradient(180deg, #1877f2, #0d5bd3);
@@ -87,7 +91,7 @@ body {
 }
 
 .left h1 {
-  font-size: 36px;
+  font-size: 32px;
 }
 
 .left p {
@@ -95,10 +99,9 @@ body {
   opacity: 0.9;
 }
 
-/* Right panel */
+/* Right */
 .right {
   flex: 1;
-  background: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,7 +109,8 @@ body {
 
 /* Form */
 .form-box {
-  width: 80%;
+  width: 100%;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -117,6 +121,7 @@ body {
   color: #1877f2;
 }
 
+/* Inputs */
 input {
   padding: 12px;
   border-radius: 10px;
@@ -135,7 +140,7 @@ button {
   padding: 12px;
   border: none;
   border-radius: 10px;
-  background: #1877f2;
+  background: linear-gradient(135deg, #1877f2, #0d5bd3);
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -143,24 +148,40 @@ button {
 }
 
 button:hover {
-  background: #145edc;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 /* Link */
 .signup-text {
   text-align: center;
   font-size: 14px;
+  margin-top: 10px;
 }
 
-.signup-text a {
-  color: #1877f2;
-  text-decoration: none;
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
 
-.signup-text a:hover {
-  text-decoration: underline;
-}
+  .left {
+    padding: 25px;
+    text-align: center;
+  }
 
+  .left h1 {
+    font-size: 26px;
+  }
+
+  .right {
+    padding: 20px;
+  }
+
+  .form-box {
+    max-width: 100%;
+  }
+}
 </style>
 </head>
 
@@ -187,7 +208,7 @@ button:hover {
       <button type="submit">Login</button>
 
       <p class="signup-text">
-        Don’t have an account? <a href="Signup.html">Sign Up</a>
+        Don’t have an account? <a href="signup.html">Sign Up</a>
       </p>
     </form>
   </div>
@@ -198,7 +219,7 @@ button:hover {
 const form = document.getElementById("loginForm");
 
 form.addEventListener("submit", async function(e) {
-  e.preventDefault(); //  THIS FIXES BUTTON ISSUE
+  e.preventDefault();
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -220,8 +241,6 @@ form.addEventListener("submit", async function(e) {
     const data = await res.json();
 
     if(res.ok) {
-     
-
       alert("Login successful");
       window.location.href = "/dashboard";
     } else {
@@ -230,7 +249,7 @@ form.addEventListener("submit", async function(e) {
 
   } catch (err) {
     console.error(err);
-    alert("Server error. Check backend.");
+    
   }
 });
 </script>

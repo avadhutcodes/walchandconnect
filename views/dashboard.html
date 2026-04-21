@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Campus Connect - Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -20,27 +21,32 @@ body {
   color: #1c1e21;
 }
 
+/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 15px 20px;
   background: white;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .navbar h2 {
   color: #1877f2;
+  font-size: 20px;
 }
 
 .nav-btn {
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
   border: 1px solid #ddd;
   background: white;
@@ -48,7 +54,7 @@ body {
   font-weight: 500;
   transition: 0.3s;
   color: #1877f2;
-  letter-spacing: 0.3px;
+  font-size: 14px;
 }
 
 .nav-btn:hover {
@@ -57,29 +63,36 @@ body {
   border-color: #1877f2;
 }
 
+/* Feed */
 .feed {
-  width: 600px;
-  margin: 30px auto;
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 0 15px;
 }
 
+/* Post */
 .post {
   background: white;
   border-radius: 15px;
-  padding: 20px;
+  padding: 18px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
   animation: fadeIn 0.4s ease;
 }
 
 .post h4 {
   color: #1877f2;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  font-size: 15px;
 }
 
 .post p {
   color: #333;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 @keyframes fadeIn {
@@ -87,6 +100,7 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Modal */
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -95,13 +109,15 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
+  padding: 15px;
 }
 
 .modal-box {
   background: white;
-  padding: 25px;
+  padding: 20px;
   border-radius: 15px;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -125,6 +141,7 @@ body {
 
 .post-btn { background: #1877f2; color: white; }
 .post-btn:hover { background: #145edc; }
+
 .close-btn { background: #eee; }
 .close-btn:hover { background: #ddd; }
 
@@ -133,6 +150,39 @@ body {
   color: #888;
   font-size: 14px;
   padding: 20px;
+}
+
+/* Delete button */
+.delete-btn {
+  margin-top:10px;
+  padding:6px 14px;
+  background:#ff4d4d;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/*Mobile Fix */
+@media (max-width: 768px) {
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .feed {
+    margin-top: 10px;
+  }
+
+  .post {
+    padding: 15px;
+  }
 }
 </style>
 </head>
@@ -167,80 +217,74 @@ body {
 
 <script>
 
-  //  CHANGE 1: Load all posts from backend when page loads
-  async function loadPosts() {
-    try {
-      const res = await fetch('/viewpost', {
-        credentials: 'include'  // sends JWT cookie automatically
-      });
+async function loadPosts() {
+  try {
+    const res = await fetch('/viewpost', {
+      credentials: 'include'
+    });
 
-      if (res.status === 401) {
-        // Not logged in, redirect to login
-        window.location.href = 'login.html';
-        return;
-      }
-
-      const data = await res.json();
-      renderPosts(data.posts);
-
-    } catch (err) {
-      console.error('Failed to load posts:', err);
-      document.getElementById('feed').innerHTML = '<p class="loading">Failed to load posts.</p>';
-    }
-  }
-
-  //  CHANGE 2: Render posts dynamically instead of hardcoded HTML
-  function renderPosts(posts) {
-    const feed = document.getElementById('feed');
-
-    if (!posts || posts.length === 0) {
-      feed.innerHTML = '<p class="loading">No posts yet. Be the first to post!</p>';
+    if (res.status === 401) {
+      window.location.href = 'login.html';
       return;
     }
 
-    feed.innerHTML = posts.map(post => `
-      <div class="post">
-        <h4>${post.username}</h4>
-        <p>${post.content}</p>
-      </div>
-    `).join('');
+    const data = await res.json();
+    renderPosts(data.posts);
+
+  } catch (err) {
+    console.error('Failed to load posts:', err);
+    document.getElementById('feed').innerHTML = '<p class="loading">Failed to load posts.</p>';
+  }
+}
+
+function renderPosts(posts) {
+  const feed = document.getElementById('feed');
+
+  if (!posts || posts.length === 0) {
+    feed.innerHTML = '<p class="loading">No posts yet. Be the first to post!</p>';
+    return;
   }
 
-  //  CHANGE 3: createPost now calls backend and refreshes feed
-  async function createPost() {
-    const content = document.getElementById('postContent').value.trim();
-    if (!content) return alert('Please write something!');
+  feed.innerHTML = posts.map(post => `
+    <div class="post">
+      <h4>${post.username}</h4>
+      <p>${post.content}</p>
+    </div>
+  `).join('');
+}
 
-    try {
-      const res = await fetch('/createpost', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',  // sends JWT cookie
-        body: JSON.stringify({ content })
-      });
+async function createPost() {
+  const content = document.getElementById('postContent').value.trim();
+  if (!content) return alert('Please write something!');
 
-      if (res.ok) {
-        document.getElementById('postContent').value = '';
-        closeModal();
-        loadPosts(); // refresh feed after posting
-      } else {
-        alert('Failed to create post. Please try again.');
-      }
+  try {
+    const res = await fetch('/createpost', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ content })
+    });
 
-    } catch (err) {
-      console.error('Error creating post:', err);
+    if (res.ok) {
+      document.getElementById('postContent').value = '';
+      closeModal();
+      loadPosts();
+    } else {
+      alert('Failed to create post.');
     }
-  }
 
-  //  CHANGE 4: showMyPosts filters from backend
-  async function showMyPosts() {
+  } catch (err) {
+    console.error('Error creating post:', err);
+  }
+}
+
+async function showMyPosts() {
   try {
     const res = await fetch('/mypost', {
       credentials: 'include'
     });
-    const data = await res.json();
 
-    // Render my posts with delete button
+    const data = await res.json();
     const feed = document.getElementById('feed');
 
     if (!data.mypost || data.mypost.length === 0) {
@@ -252,9 +296,7 @@ body {
       <div class="post">
         <h4>${post.username}</h4>
         <p>${post.content}</p>
-        <button 
-          onclick="deletePost('${post._id}')" 
-          style="margin-top:10px; padding:6px 14px; background:#ff4d4d; color:white; border:none; border-radius:8px; cursor:pointer;">
+        <button onclick="deletePost('${post._id}')" class="delete-btn">
           Delete
         </button>
       </div>
@@ -273,7 +315,7 @@ async function deletePost(id) {
     });
 
     if (res.ok) {
-      showMyPosts(); // refresh my posts after deleting
+      showMyPosts();
     } else {
       alert('Failed to delete post.');
     }
@@ -282,16 +324,15 @@ async function deletePost(id) {
   }
 }
 
-  function openModal() {
-    document.getElementById('modal').style.display = 'flex';
-  }
+function openModal() {
+  document.getElementById('modal').style.display = 'flex';
+}
 
-  function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-  }
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
 
-  // Auto-load posts when page opens
-  loadPosts();
+loadPosts();
 
 </script>
 

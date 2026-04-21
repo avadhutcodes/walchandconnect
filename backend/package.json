@@ -2,7 +2,7 @@
   "name": "walchandconnect",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev":"nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,8 +19,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.1.1",
     "mongoose": "^9.4.1",
-    "mysql2": "^3.20.0",
-    "react-router-dom": "^7.14.1"
+    "mysql2": "^3.20.0"
+    
   },
   "repository": {
     "type": "git",

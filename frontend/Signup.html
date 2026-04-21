@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Walchand Connect - Signup</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -15,17 +16,17 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-
   background: linear-gradient(135deg, #0f3460, #1877f2, #4aa3ff);
   position: relative;
+  overflow-x: hidden;
+  padding: 20px;
 }
 
-/* 🔵 Animated Blobs */
+/* Blobs */
 .blob {
   position: absolute;
   border-radius: 50%;
@@ -35,16 +36,16 @@ body {
 }
 
 .blob1 {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   background: #1877f2;
   top: -50px;
   left: -50px;
 }
 
 .blob2 {
-  width: 350px;
-  height: 350px;
+  width: 300px;
+  height: 300px;
   background: #4aa3ff;
   bottom: -80px;
   right: -80px;
@@ -52,8 +53,8 @@ body {
 }
 
 .blob3 {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   background: #0d5bd3;
   top: 40%;
   left: 60%;
@@ -67,17 +68,18 @@ body {
 
 /* Container */
 .container {
-  width: 900px;
-  height: 500px;
+  width: 100%;
+  max-width: 900px;
+  min-height: 500px;
   display: flex;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 25px 70px rgba(0,0,0,0.3);
   animation: fadeIn 1s ease;
+  background: white;
   z-index: 1;
 }
 
-/* Fade animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -101,19 +103,18 @@ body {
 }
 
 .left h1 {
-  font-size: 38px;
+  font-size: 32px;
   margin-bottom: 10px;
 }
 
 .left p {
-  font-size: 16px;
+  font-size: 15px;
   opacity: 0.9;
 }
 
 /* Right */
 .right {
   flex: 1;
-  background: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,7 +122,8 @@ body {
 
 /* Form */
 .form-box {
-  width: 80%;
+  width: 100%;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -144,7 +146,6 @@ body {
 .form-box input:focus {
   border-color: #1877f2;
   box-shadow: 0 0 10px rgba(24,119,242,0.3);
-  transform: scale(1.02);
 }
 
 /* Button */
@@ -168,22 +169,32 @@ body {
 .login-text {
   text-align: center;
   font-size: 14px;
-  margin-top:15px;
-  width: 100%;
+  margin-top: 10px;
 }
 
-.login-text a {
-  color: #1877f2;
-  text-decoration: none;
-  font-weight: 500;
-  transition: 0.2s;
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
 
-.login-text a:hover {
-  color: #0d5bd3;
-  text-decoration: underline;
-}
+  .left {
+    padding: 25px;
+    text-align: center;
+  }
 
+  .left h1 {
+    font-size: 26px;
+  }
+
+  .right {
+    padding: 20px;
+  }
+
+  .form-box {
+    max-width: 100%;
+  }
+}
 </style>
 </head>
 
@@ -204,27 +215,26 @@ body {
     <form class="form-box" id="signupForm">
       <h2>Create Account</h2>
 
-      <input type="text"  id="username" placeholder="Username" required>
+      <input type="text" id="username" placeholder="Username" required>
       <input type="password" id="password" placeholder="Password" required>
 
       <button type="submit">Create Account</button>
- <p class="login-text">
+
+      <p class="login-text">
         Already have an account? <a href="login.html">Login</a>
       </p>
-      
     </form>
-   
   </div>
 
 </div>
+
 <script>
 document.getElementById("signupForm").addEventListener("submit", async function(e) {
-  e.preventDefault(); //  it is used to the stop page reload
+  e.preventDefault();
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  // Basic validation
   if(username === "" || password === "") {
     alert("Please fill all fields");
     return;
@@ -236,18 +246,13 @@ document.getElementById("signupForm").addEventListener("submit", async function(
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        username: username,
-        password: password
-      })
+      body: JSON.stringify({ username, password })
     });
 
     const data = await response.json();
 
     if(response.ok) {
       alert("Signup successful!");
-
-      // redirect to login page (change later if needed)
       window.location.href = "login.html";
     } else {
       alert(data.message || "Signup failed");
