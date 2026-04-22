@@ -216,6 +216,7 @@ body {
 </div>
 
 <script>
+  let lastpostid = null;
 
 async function loadPosts() {
   try {
@@ -229,6 +230,9 @@ async function loadPosts() {
     }
 
     const data = await res.json();
+    if(data.posts.length>0 && data.posts[0]._id === lastpostid){
+      return ;
+    }
     renderPosts(data.posts);
 
   } catch (err) {
@@ -244,6 +248,7 @@ function renderPosts(posts) {
     feed.innerHTML = '<p class="loading">No posts yet. Be the first to post!</p>';
     return;
   }
+  lastpostid = posts[0]._id;
 
   feed.innerHTML = posts.map(post => `
     <div class="post">
@@ -333,7 +338,7 @@ function closeModal() {
 }
 
 loadPosts();
-setInterval(loadPosts,2000);
+setInterval(loadPosts,3000);
 
 </script>
 
