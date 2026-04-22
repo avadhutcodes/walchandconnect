@@ -102,13 +102,13 @@ res.json({message:"post deleted successfully"});
 };
 
 const viewpost =  async (req,res) => {
-  const posts = await Post.find();
+  const posts = await Post.find().sort({time:-1});
   res.json({posts});
 };
 const mypost = async(req,res) =>{
   const mypost = await Post.find({
     userId : req.user.id
-  });
+  }).sort({time:-1});
   res.json({mypost});
 };
 module.exports = {signup , login , createpost , deletepost , viewpost, mypost };
