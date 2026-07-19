@@ -6,6 +6,11 @@ const postschema = new mongoose.Schema({
         required:true
     },
 
+   title:{
+    type:String,
+    required:true
+   },
+
     content:{
         type:String,
         required:true
@@ -18,7 +23,10 @@ const postschema = new mongoose.Schema({
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true
-    }
+    },
+
+     likes:["string"]
+
 });
 
 module.exports = mongoose.model("Post" , postschema);
