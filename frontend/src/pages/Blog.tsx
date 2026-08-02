@@ -1,7 +1,6 @@
 import { data, useNavigate, useParams } from "react-router"
 import { Button } from "@/components/ui/button"
 import { Appbar } from "../components/ui/Appbar"
-import { Histroy } from "../components/ui/history"
 import { MainCon } from "../components/ui/MainCon"
 import { useState,useEffect, useRef } from "react"
 import axios from "axios"
@@ -71,11 +70,7 @@ export function Blog() {
                 <div style={{fontSize:28,fontFamily:"Roboto Slab",color:"#1a1f4e"}}>
                    <b> Blog End's here ........ hope you found something informative here ! </b>
                 </div>
-                <div style={{marginLeft:100,marginTop:1}}>
-                  <Button variant={"outline"} style={{backgroundColor:"#1a1f4e",color:"#fff",fontWeight:500,fontFamily:"Roboto Slab",cursor:"pointer",borderRadius:30}} onClick={() =>{
-                     
-                  }}>Informative for {blog.likes.length}</Button>
-                </div>
+              
              </div>
         </div>
           
