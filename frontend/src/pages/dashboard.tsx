@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Appbar } from "../components/ui/Appbar"
-import { Histroy } from "../components/ui/history"
+import { Leftcon } from "@/components/ui/Leftcon"
 import { MainCon } from "../components/ui/MainCon"
 import { useState,useEffect } from "react"
 import { useNavigate } from "react-router"
@@ -29,10 +29,10 @@ export function Dashboard () {
              <Appbar/>
             </div>
            <div style={{display:"flex",marginTop:64}}>
-            <div style={{position:"fixed"}}>
-                <Histroy/>
+            <div style={{flex:2}}>
+               <Leftcon/>
             </div>
-            <div>
+            <div style={{flex:8}}>
                 <MainCon/>
             </div>
 
@@ -45,16 +45,3 @@ export function Dashboard () {
     )
 }
 
-/*
- <div style={{position:"fixed",width:"100vw"}}>
-                <Appbar/>
-            </div>
-             <div style={{position:"fixed",height:1}}>
-               <Histroy/>
-             </div>
-
-
-
-
-
-*/

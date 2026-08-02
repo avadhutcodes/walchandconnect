@@ -3,7 +3,8 @@ import { useNavigate } from "react-router"
 import { useState,useEffect } from "react"
 import { Card } from "./card"
 import axios from "axios"
-
+import { IoCreateOutline } from "react-icons/io5";
+import { IoIosCreate } from "react-icons/io";
 export function Appbar(){
     const navigate = useNavigate()
    return(
@@ -16,11 +17,11 @@ export function Appbar(){
                 </div>
                
                 
-                <div style={{fontFamily:"Inter",fontWeight:400,marginRight:20,marginTop:15,paddingBottom:13,display:"flex"}}>
+                <div style={{fontFamily:"Inter",fontWeight:400,marginRight:20,marginTop:15,paddingBottom:18,display:"flex"}}>
                     <div>
-                         <Button variant={"outline"} style={{cursor:"pointer",backgroundColor:"white",color:"#1a1f4e",marginRight:15}} onClick={()=>{
+                         <Button variant={"outline"} style={{cursor:"pointer",backgroundColor:"white",color:"#1a1f4e",marginRight:15}}  onClick={()=>{
                            navigate("/Publish")
-                         }}>Create</Button>
+                         }}><IoIosCreate size={50} /></Button>
                     </div>
                     <div>
                          <Button variant={"outline"} style={{cursor:"pointer",backgroundColor:"white",color:"#1a1f4e"}} onClick={()=>{

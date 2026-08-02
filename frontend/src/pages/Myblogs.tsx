@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button"
 import { Appbar } from "../components/ui/Appbar"
-import { Histroy } from "../components/ui/history"
 import { MainCon } from "../components/ui/MainCon"
 import { useState,useEffect, useRef } from "react"
 import { useNavigate } from "react-router"
 import axios from "axios"
 import { Card } from "@/components/ui/card"
 import { Blog } from "./Blog"
+import { ChevronRight } from "lucide-react";
+import { Trash2 } from "lucide-react"
+import { IoPersonSharp } from "react-icons/io5";
 import {
   useQuery,
   useMutation,
@@ -76,8 +78,7 @@ export function Myblog () {
     userId:string;
     content:string;
    }
-    console.log("my blog renderd")
-
+    
     const [post , setpost] = useState<post[]>([]);
 
 
@@ -159,15 +160,15 @@ export function Myblog () {
                                   <div style={{backgroundColor:"black",height:2,paddingBottom:1}}></div>
                                   <div style={{display:"flex",justifyContent:"space-between"}}>
                                     <div style={{marginLeft:10}}>
-                                      <Button variant={"outline"} style={{cursor:"pointer",backgroundColor:"#1a1f4e",color:"white"}} onClick={() =>{
+                                      <Button variant={"outline"} style={{cursor:"pointer",backgroundColor:"#1a1f4e",color:"white",boxShadow:"0 2px 8px rgba(0,0,0,0.12)"}} onClick={() =>{
                                         navigate(`/blog/${blog._id}`)
-                                      }}>Expand</Button>
+                                      }}>Read More <ChevronRight size={16} color="white"/></Button>
                                     </div>
                 
                                     <div style={{marginRight:10}}>
-                                      <Button variant={"outline"} style={{cursor:"pointer",backgroundColor:"red",color:"white"}} onClick={()=>{
+                                      <Button variant={"outline"} style={{cursor:"pointer",backgroundColor:"#EF4444",color:"white"}} onClick={()=>{
                                         mutation.mutate(blog._id)
-                                      }}>Delete</Button>
+                                      }}><Trash2 size={18}/></Button>
                                     </div>
                 
                 
